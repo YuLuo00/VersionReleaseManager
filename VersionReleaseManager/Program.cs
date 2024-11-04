@@ -45,12 +45,6 @@ namespace VersionReleaseManager
             // 切换到克隆目录
             Directory.SetCurrentDirectory(cloneDir);
 
-            // 创建标签
-            if(String.IsNullOrEmpty(tagName) == false) {
-                RunCommand("git", $"tag {tagName}");
-                RunCommand("git", $"push origin {tagName}"); // 推送标签到远程
-            }
-
             // 生成构建目录
             string buildDir = Path.Combine(cloneDir, "build");
             Directory.CreateDirectory(buildDir);
@@ -68,6 +62,12 @@ namespace VersionReleaseManager
             ZipFile.CreateFromDirectory(installDir, zipPath);
 
             Console.WriteLine("编译和打包完成。");
+
+            // 创建标签
+            if (String.IsNullOrEmpty(tagName) == false) {
+                RunCommand("git", $"tag {tagName}");
+                RunCommand("git", $"push origin {tagName}"); // 推送标签到远程
+            }
         }
 
         static void RunCommand(string command, string arguments)
