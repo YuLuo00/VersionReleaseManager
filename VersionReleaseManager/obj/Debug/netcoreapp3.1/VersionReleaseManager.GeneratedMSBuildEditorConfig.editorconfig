@@ -1,0 +1,5 @@
+is_global = true
+build_property.RootNamespace = VersionReleaseManager
+build_property.ProjectDir = D:\_project\_repo\VersionReleaseManager\VersionReleaseManager\
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 

@@ -1,0 +1,17 @@
+D:\_project\_repo\VersionReleaseManager\VersionReleaseManager\bin\Debug\net8.0\VersionReleaseManager.exe
+D:\_project\_repo\VersionReleaseManager\VersionReleaseManager\bin\Debug\net8.0\VersionReleaseManager.deps.json
+D:\_project\_repo\VersionReleaseManager\VersionReleaseManager\bin\Debug\net8.0\VersionReleaseManager.runtimeconfig.json
+D:\_project\_repo\VersionReleaseManager\VersionReleaseManager\bin\Debug\net8.0\VersionReleaseManager.dll
+D:\_project\_repo\VersionReleaseManager\VersionReleaseManager\bin\Debug\net8.0\VersionReleaseManager.pdb
+D:\_project\_repo\VersionReleaseManager\VersionReleaseManager\obj\Debug\net8.0\VersionReleaseManager.GeneratedMSBuildEditorConfig.editorconfig
+D:\_project\_repo\VersionReleaseManager\VersionReleaseManager\obj\Debug\net8.0\VersionReleaseManager.AssemblyInfoInputs.cache
+D:\_project\_repo\VersionReleaseManager\VersionReleaseManager\obj\Debug\net8.0\VersionReleaseManager.AssemblyInfo.cs
+D:\_project\_repo\VersionReleaseManager\VersionReleaseManager\obj\Debug\net8.0\VersionReleaseManager.csproj.CoreCompileInputs.cache
+D:\_project\_repo\VersionReleaseManager\VersionReleaseManager\obj\Debug\net8.0\VersionReleaseManager.dll
+D:\_project\_repo\VersionReleaseManager\VersionReleaseManager\obj\Debug\net8.0\refint\VersionReleaseManager.dll
+D:\_project\_repo\VersionReleaseManager\VersionReleaseManager\obj\Debug\net8.0\VersionReleaseManager.pdb
+D:\_project\_repo\VersionReleaseManager\VersionReleaseManager\obj\Debug\net8.0\VersionReleaseManager.genruntimeconfig.cache
+D:\_project\_repo\VersionReleaseManager\VersionReleaseManager\obj\Debug\net8.0\ref\VersionReleaseManager.dll
+D:\_project\_repo\VersionReleaseManager\VersionReleaseManager\bin\Debug\net8.0\SevenZip.dll
+D:\_project\_repo\VersionReleaseManager\VersionReleaseManager\obj\Debug\net8.0\VersionReleaseManager.csproj.AssemblyReference.cache
+D:\_project\_repo\VersionReleaseManager\VersionReleaseManager\obj\Debug\net8.0\VersionR.1D2491B6.Up2Date

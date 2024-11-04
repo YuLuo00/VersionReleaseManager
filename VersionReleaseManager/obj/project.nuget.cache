@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "nOv5RqZ3rHg=",
+  "success": true,
+  "projectFilePath": "D:\\_project\\_repo\\VersionReleaseManager-1\\VersionReleaseManager\\VersionReleaseManager.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\zhangyubing\\.nuget\\packages\\sevenzip\\19.0.0\\sevenzip.19.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}
