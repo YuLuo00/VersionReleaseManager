@@ -5,3 +5,5 @@
 /.vs
 /VersionReleaseManager/bin/Debug/net8.0
 /VersionReleaseManager/obj
+/VersionReleaseManagerUI/obj
+/VersionReleaseManagerUI/bin/Debug/net8.0-windows
