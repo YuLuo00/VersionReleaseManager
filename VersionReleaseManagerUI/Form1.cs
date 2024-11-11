@@ -119,5 +119,28 @@ namespace VersionReleaseManagerUI
             myObject.RaiseEvent();
         }
 
+        private void u_b_testConfig_Click(object sender, EventArgs e)
+        {
+            VersionReleaseManager.Configuration configuration = new();
+            configuration.Units.AddRange( [
+                new ConfigUnit
+                {
+                    ProjectName = "projectName1",
+                    BrachName = "master",
+                    ReleaseBase = "./CMakeLists.txt",
+                    RepoUrl = "www.git.com/aaaaaaa",
+                    CompileConfig="release",
+                },
+                new ConfigUnit
+                {
+                    ProjectName = "projectName2",
+                    BrachName = "dev",
+                    ReleaseBase = "./release.sh",
+                    RepoUrl = "www.git.com/bbbbb",
+                    CompileConfig="debug",
+                },
+            ]);
+            configuration.Dump("./config_example.json");
+        }
     }
 }
