@@ -69,8 +69,7 @@ namespace VersionReleaseManagerUI
             ManualResetEventSlim releaserHadBeenLinked = new ManualResetEventSlim(false);
             var result = Task.Run(() =>
             {
-                using(Release releaser = new VersionReleaseManager.Release())
-                {
+                using (Release releaser = new VersionReleaseManager.Release()) {
                     releaser.E_begin += () => this.addMsg("开始");
                     releaserHadBeenLinked.Set();
                     releaser.exec("", "", "", null, null, null);
@@ -80,7 +79,8 @@ namespace VersionReleaseManagerUI
             addMsg("正在后台执行发布任务");
         }
 
-        private void addMsg(string msg) {
+        private void addMsg(string msg)
+        {
             u_tb_msg?.AppendText(msg);
         }
         public class MyClass
