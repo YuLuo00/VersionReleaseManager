@@ -12,8 +12,7 @@ namespace VersionReleaseManager
         public event Action E_finished;
         public event Action E_begin;
         public event Action<string> E_message;
-
-        void Dispose()
+        void IDisposable.Dispose()
         {
             this.E_begin = null;
             this.E_begin = null;
@@ -26,46 +25,75 @@ namespace VersionReleaseManager
         public void exec(string repoUrl, string cloneDir,
                          string installDir, string? brachName, string? compileDir, string? tagName)
         {
-            // 清空目标目录
-            RemoveIfExist(cloneDir);
-            Directory.CreateDirectory(cloneDir);
+            try {
+                this?.E_begin();
+                string error_buffer;
+                // 清空目标目录
+                if (String.IsNullOrEmpty(cloneDir)) {
+                    this.E_message?.Invoke("dir to git clone is illegle" + Environment.NewLine);
+                    return;
+                }
+                RemoveIfExist(cloneDir);
+                Directory.CreateDirectory(cloneDir);
 
-            // 克隆 Git 仓库
-            string cmdClone = "clone "
-                + (String.IsNullOrEmpty(brachName) ? "" : $" -b {brachName} ")
-                + $"{repoUrl} {cloneDir}";
-            RunCommand("git", cmdClone);
+                // 克隆 Git 仓库
+                this?.E_message("[begin] git clone ......" + Environment.NewLine);
+                string cmdClone = "clone "
+                    + (String.IsNullOrEmpty(brachName) ? "" : $" -b {brachName} ")
+                    + $"{repoUrl} {cloneDir}";
+                RunCommand("git", cmdClone, out error_buffer);
+                this?.E_message("[end] git clone ......" + Environment.NewLine);
 
-            // 切换到克隆目录
-            Directory.SetCurrentDirectory(cloneDir);
+                // 切换到克隆目录
+                Directory.SetCurrentDirectory(cloneDir);
 
-            // 生成构建目录
-            string buildDir = Path.Combine(cloneDir, "build");
-            Directory.CreateDirectory(buildDir);
-            Directory.SetCurrentDirectory(buildDir);
+                // 生成构建目录
+                string buildDir = Path.Combine(cloneDir, "build");
+                Directory.CreateDirectory(buildDir);
+                Directory.SetCurrentDirectory(buildDir);
 
-            string cmakeDir = compileDir ?? "..";
-            cmakeDir = "..";
-            // CMake 编译
-            RunCommand($"{CmakeExePath}", $"{cmakeDir} -DCMAKE_INSTALL_PREFIX={installDir}");
-            RunCommand($"{CmakeExePath}", "--build . --target install");
+                string cmakeDir = compileDir ?? "..";
+                cmakeDir = "..";
+                // CMake 编译
+                this?.E_message("[begin] compile ......" + Environment.NewLine);
+                RunCommand($"{CmakeExePath}", $"{cmakeDir} -DCMAKE_INSTALL_PREFIX={installDir}", out error_buffer);
+                RunCommand($"{CmakeExePath}", "--build . --target install", out error_buffer);
+                this?.E_message("[end] compile ......" + Environment.NewLine);
 
-            // 压缩安装目录
-            string zipPath = $"{installDir}.zip";
-            RemoveIfExist(zipPath);
-            ZipFile.CreateFromDirectory(installDir, zipPath);
 
-            //Console.WriteLine("编译和打包完成。");
+                // 压缩安装目录
+                this?.E_message("[begin] compress ......" + Environment.NewLine);
+                string zipPath = $"{installDir}.zip";
+                RemoveIfExist(zipPath);
+                ZipFile.CreateFromDirectory(installDir, zipPath);
+                this?.E_message("[end] compress ......" + Environment.NewLine);
 
-            // 创建标签
-            if (String.IsNullOrEmpty(tagName) == false) {
-                RunCommand("git", $"tag {tagName}");
-                RunCommand("git", $"push origin {tagName}"); // 推送标签到远程
+                this?.E_message("编译和打包完成。" + Environment.NewLine);
+
+                // 创建标签
+                if (String.IsNullOrEmpty(tagName) == false) {
+                    this?.E_message("[begin] push tag ......" + Environment.NewLine);
+                    if(!RunCommand("git", $"tag {tagName}", out error_buffer)) {
+                        this?.E_message(error_buffer);
+                        return;
+                    }
+                    // 推送标签到远程
+                    if (!RunCommand("git", $"push origin {tagName}", out error_buffer)) {
+                        this?.E_message(error_buffer);
+                        return;
+                    }
+                    this?.E_message("[end] push tag ......" + Environment.NewLine);
+                }
             }
+            finally {
+                this.E_finished?.Invoke();
+            }
+
         }
 
-        static void RunCommand(string command, string arguments)
+        static bool RunCommand(string command, string arguments, out string errorMsg)
         {
+            errorMsg = string.Empty;
             var processInfo = new ProcessStartInfo
             {
                 FileName = command,
@@ -78,18 +106,25 @@ namespace VersionReleaseManager
 
 
             using (var process = Process.Start(processInfo)) {
+                if (process == null) {
+                    errorMsg = "cmd进程启动失败";
+                    return false;
+                }
                 process.WaitForExit();
                 
                 string output = process.StandardOutput.ReadToEnd();
                 string error = process.StandardError.ReadToEnd();
 
                 if (process.ExitCode != 0) {
-                    Console.WriteLine($"错误: {error}");
-                    throw new Exception($"命令执行失败: {command} {arguments}");
+                    errorMsg += ($"错误: {error}" + Environment.NewLine
+                               + $"命令执行失败: {command} {arguments}");
+                    return false;
                 }
 
                 Console.WriteLine(output);
             }
+
+            return true;
         }
 
         string directoryPath = @"D:\path\to\your\directory"; // 替换为你的目录路径
@@ -136,11 +171,6 @@ namespace VersionReleaseManager
             catch (Exception ex) {
                 Console.WriteLine($"操作失败: {ex.Message}");
             }
-        }
-
-        void IDisposable.Dispose()
-        {
-            throw new NotImplementedException();
         }
     }
 }

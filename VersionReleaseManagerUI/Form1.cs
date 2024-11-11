@@ -64,24 +64,39 @@ namespace VersionReleaseManagerUI
             string branch = this.u_cb_brachName.Text;
             string tagName = this.u_tb_tagName.Text;
 
+            this.PushReleaseTask(repoUri, branch, tagName);
+        }
+
+        private Task PushReleaseTask(string repoUri, string branch, string tagName)
+        {
             //this.VRManager.Release(repoUri, branch, tagName);
-            RunReleaseTask();
-            ManualResetEventSlim releaserHadBeenLinked = new ManualResetEventSlim(false);
+            //RunReleaseTask();
+            ManualResetEventSlim releaserHadBeenLinked = new(false);
+            addMsg("开始生成后台任务" + Environment.NewLine);
             var result = Task.Run(() =>
             {
                 using (Release releaser = new VersionReleaseManager.Release()) {
-                    releaser.E_begin += () => this.addMsg("开始");
+                    releaser.E_begin += () => this.addMsg("【开始】后台任务" + Environment.NewLine);
+                    releaser.E_message += this.addMsg;
+                    releaser.E_finished += () => this.addMsg("【结束】后台任务" + Environment.NewLine);
                     releaserHadBeenLinked.Set();
-                    releaser.exec("", "", "", null, null, null);
+                    releaser.exec(repoUri, "./clone_dir", branch, "./clone_dir_install", "./clone_dir_build", tagName);
                 }
             });
             releaserHadBeenLinked.Wait();
-            addMsg("正在后台执行发布任务");
+            addMsg("正在后台执行发布任务" + Environment.NewLine);
+
+            return result;
         }
 
         private void addMsg(string msg)
         {
-            u_tb_msg?.AppendText(msg);
+            if (u_tb_tagName.InvokeRequired) {
+                u_tb_tagName.BeginInvoke(() => addMsg(msg));
+            }
+            else {
+                u_tb_msg?.AppendText(msg);
+            }
         }
         public class MyClass
         {
