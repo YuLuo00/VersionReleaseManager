@@ -7,3 +7,5 @@
 /VersionReleaseManager/obj
 /VersionReleaseManagerUI/obj
 /VersionReleaseManagerUI/bin/Debug/net8.0-windows
+/bin
+/out/build/x64-Debug

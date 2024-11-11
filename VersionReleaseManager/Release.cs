@@ -2,12 +2,24 @@
 using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
+using System.Security.Cryptography.X509Certificates;
 using SevenZip;
 
-namespace VersionReleaseManagerUI
+namespace VersionReleaseManager
 {
-    internal class Release
+    public class Release :  IDisposable
     {
+        public event Action E_finished;
+        public event Action E_begin;
+        public event Action<string> E_message;
+
+        void Dispose()
+        {
+            this.E_begin = null;
+            this.E_begin = null;
+            this.E_message = null;
+        }
+
         public string CmakeExePath { get; set; }
             = "D:\\_file\\？？\\cmake-3.30.2-windows-x86_64\\cmake-3.30.2-windows-x86_64\\bin\\cmake.exe";
 
@@ -124,6 +136,11 @@ namespace VersionReleaseManagerUI
             catch (Exception ex) {
                 Console.WriteLine($"操作失败: {ex.Message}");
             }
+        }
+
+        void IDisposable.Dispose()
+        {
+            throw new NotImplementedException();
         }
     }
 }

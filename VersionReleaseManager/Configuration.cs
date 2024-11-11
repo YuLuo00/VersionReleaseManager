@@ -15,10 +15,10 @@ using System.Numerics;
 
 namespace VersionReleaseManager
 {
-    internal class Configuration
+    public class Configuration
     {
-        public List<ConfigUnit> units { get; set; } = new List<ConfigUnit>();
-        string DefaultConfigName { get; set; } = "VR_Config.json";
+        public List<ConfigUnit> Units { get; set; } = new List<ConfigUnit>();
+        private string DefaultConfigName { get; set; } = "VR_Config.json";
 
         public void ReadFromFile(string? filePath = null)
         {
@@ -49,9 +49,9 @@ namespace VersionReleaseManager
             File.WriteAllText(filePathFull, dumpStr);
         }
 
-        void CopyFrom(Configuration other)
+        private void CopyFrom(Configuration other)
         {
-            this.units = other.units;
+            this.Units = other.Units;
         }
     }
 
@@ -59,7 +59,20 @@ namespace VersionReleaseManager
     {
         public string ProjectName { get; set; }
         public string RepoUrl { get; set; }
-        public string? brachName { get; set; }
+        public string? BrachName { get; set; }
+        /// <summary>
+        /// 用于发布的基准文件，CMakeLists.txt, bat，或者其他脚本，可执行文件等（包含路径）
+        ///     默认是更目录的CMakeLists.txt
+        ///     脚本参数协议:
+        ///     --version      版本号
+        ///     --tag          发布到git的tag名
+        ///     --output_dir   待发布文件的输出路径
+        /// </summary>
+        public string ReleaseBase { get; set; } = "./CMakeLists.txt";
+        /// <summary>
+        /// 编译配置，Release/Debug等
+        /// </summary>
+        public string CompileConfig { get; set; } = "Release";
     }
     //public enum BuildType
     //{
